@@ -5,7 +5,8 @@ from typing import Optional, Any
 
 class Settings(BaseSettings):
     # Database settings
-    POSTGRES_SERVER: str = Field(..., env="POSTGRES_SERVER")
+    POSTGRES_HOST: str = Field(..., env="POSTGRES_HOST")
+    POSTGRES_PORT: int = Field(..., env="POSTGRES_PORT")
     POSTGRES_USER: str = Field(..., env="POSTGRES_USER")
     POSTGRES_PASSWORD: str = Field(..., env="POSTGRES_PASSWORD")
     POSTGRES_DB: str = Field(..., env="POSTGRES_DB")
@@ -30,7 +31,8 @@ class Settings(BaseSettings):
             scheme="postgresql",
             username=values["POSTGRES_USER"],
             password=values["POSTGRES_PASSWORD"],
-            host=values["POSTGRES_SERVER"],
+            host=values["POSTGRES_HOST"],
+            port=values["POSTGRES_PORT"],
             path=f"/{values.get('POSTGRES_DB', '')}",
         )
 

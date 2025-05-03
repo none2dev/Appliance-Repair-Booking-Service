@@ -1,115 +1,75 @@
-# Appliance-Repair-Booking-Service -- Cart Service
-Python: 3.12.9
+# Appliance-Repair-Booking-Service
+# Cart Service
 
-ERD (Entity Relationship Diagram)
-+----------------+       +----------------+       +-------------------+
-|     Users      |       |     Roles      |       |    Services       |
-+----------------+       +----------------+       +-------------------+
-| PK: id         |<----->| PK: id         |       | PK: id            |
-|    username    |       |    name        |       |    name           |
-|    email       |       |    description |       |    description    |
-|    password    |       +----------------+       |    base_price     |
-|    full_name   |                               |    service_type   |
-|    phone       |                               |    duration_hours |
-|    address     |                               +-------------------+
-| FK: role_id    |                                       ^
-|    is_active   |                                       |
-|    created_at  |                                       |
-|    updated_at  |                               +-------------------+
-+----------------+                               |    CartItems      |
-        ^                                        +-------------------+
-        |                                        | PK: id            |
-+----------------+       +----------------+      | FK: user_id       |
-|    Bookings    |       |     Carts      |      | FK: service_id    |
-+----------------+       +----------------+      |    quantity       |
-| PK: id         |       | PK: id         |      |    added_at       |
-| FK: user_id    |       | FK: user_id    |      +-------------------+
-| FK: service_id |       |    status      |              ^
-|    booking_date|       |    created_at  |              |
-|    status      |       |    updated_at  |      +-------------------+
-|    notes       |       +----------------+      |    Discounts      |
-|    technician  |               ^               +-------------------+
-|    address     |               |               | PK: id            |
-|    created_at  |       +----------------+      |    name           |
-|    updated_at  |       |  BookingItems  |      |    code           |
-+----------------+       +----------------+      |    discount_type  |
-                        | PK: id         |      |    value          |
-                        | FK: booking_id |      |    valid_from     |
-                        | FK: service_id  |      |    valid_to       |
-                        |    quantity     |      |    is_active      |
-                        |    price        |      +-------------------+
-                        +----------------+
-						
+A microservice for managing shopping carts in the Appliance Repair Booking System. This service handles cart operations including adding/removing services, managing quantities, and checkout functionality.
 
-Project Structure
-appliance-repair-booking-cart-service/
-├── .env
-├── alembic/
-├── app/
-│   ├── __init__.py
-│   ├── main.py
-│   ├── database.py
-│   ├── config.py
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── base.py
-│   │   ├── user.py
-│   │   ├── role.py
-│   │   ├── service.py
-│   │   ├── cart.py
-│   │   ├── booking.py
-│   │   └── discount.py
-│   ├── schemas/
-│   │   ├── __init__.py
-│   │   ├── user.py
-│   │   ├── role.py
-│   │   ├── service.py
-│   │   ├── cart.py
-│   │   ├── booking.py
-│   │   └── discount.py
-│   ├── crud/
-│   │   ├── __init__.py
-│   │   ├── user.py
-│   │   ├── role.py
-│   │   ├── service.py
-│   │   ├── cart.py
-│   │   ├── booking.py
-│   │   └── discount.py
-│   ├── api/
-│   │   ├── __init__.py
-│   │   ├── v1/
-│   │   │   ├── __init__.py
-│   │   │   └── endpoints/
-│   │   │       ├── __init__.py
-│   │   │       ├── auth.py
-│   │   │       ├── users.py
-│   │   │       ├── services.py
-│   │   │       ├── admin.py
-│   │   │       ├── carts.py
-│   │   │       ├── bookings.py
-│   │   │       └── discounts.py
-│   │   │   
-│   ├── core/
-│   │   ├── __init__.py
-│   │   ├── auth.py
-│   │   └── security.py
-│   ├── dependencies/
-│   │   ├── __init__.py
-│   │   ├── auth.py
-│   │   └── roles.py
-│   └── utils/
-│       ├── __init__.py
-│       ├── discount.py
-│       └── pricing.py
-├── tests/
-├── requirements.txt
-├── alembic.ini
-└── README.md
+## Features
 
+- **Cart Management**:
+  - Create and manage user carts
+  - Add/remove repair services (AC, TV, Oven)
+  - Update service quantities
+  - Cart status tracking (active, checked out, abandoned)
 
-Database Migrations:
-alembic upgrade head
+- **Integration**:
+  - Service catalog integration
+  - User authentication
+  - Booking system synchronization
 
+- **Pagination & Filtering**:
+  - Paginated cart listings
+  - Filter by cart status
 
-Run the Application
-uvicorn app.main:app --reload
+## Tech Stack
+
+- **Framework**: FastAPI
+- **Database**: PostgreSQL
+- **Authentication**: JWT
+- **Pagination**: fastapi-pagination
+- **Containerization**: Docker
+- **Testing**: Pytest
+- **API Documentation**: Swagger UI & ReDoc
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.12+
+- PostgreSQL 13+
+- Docker (optional)
+- Python Version Tested: 3.12.9
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/none2dev/Appliance-Repair-Booking-Service.git
+   cd cart-service
+   
+2. Create and activate virtual environment:
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # Linux/Mac
+    venv\Scripts\activate     # Windows
+
+3. Install dependencies:
+    ```bash
+   pip install -r requirements.txt
+
+4. Set up environment variables:
+    ```bash
+   cp .env.example .env
+
+    Edit .env with your configuration.
+
+5. Create PostgreSQL database:
+    ```bash
+   CREATE DATABASE cart_service;
+
+6. Run migrations:
+    ```bash
+   alembic upgrade head
+
+7. Running the Service:
+    ```bash
+   uvicorn app.main:app --reload
