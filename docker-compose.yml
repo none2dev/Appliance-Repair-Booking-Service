@@ -4,33 +4,33 @@ services:
   slot-service:
     build: ./slot-service
     ports:
-      - "8001:8001"
+      - "9009:8000"
     depends_on:
       - redis
     environment:
       - REDIS_HOST=redis
-      - REDIS_PORT=6379
+      - REDIS_PORT=6979
 
   cart-service:
     build: ./cart-service
     ports:
-      - "8000:8000"
+      - "8009:8000"
     depends_on:
       - redis
       - postgres
     env_file:
       - ./cart-service/.env
     environment:
-      - SLOT_SERVICE_URL=http://slot-service:8001
+      - SLOT_SERVICE_URL=http://slot-service:9009
 
   redis:
     image: redis:alpine
     ports:
-      - "6379:6379"
+      - "6979:6379"
 
   postgres:
     image: postgres:15
     env_file:
       - ./cart-service/.env
     ports:
-      - "5432:5432"
+      - "5433:5432"
